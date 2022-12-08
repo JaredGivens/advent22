@@ -1,12 +1,6 @@
 use std::fs;
 
 fn calco (c: &mut std::str::Chars) -> i32 {
-    match c.nth(0).unwrap() {
-        'A' => 3,
-        'B' => 0,
-        'C' => 6,
-        _ => 0,
-    }
 }
 
 fn main() {
@@ -22,13 +16,28 @@ fn main() {
 
         match line.nth(2).unwrap() {
             'X' => {
-                score += 1 + calco(&mut line);
+                score += 1 + match c.nth(0).unwrap() {
+                    'A' => 3,
+                    'B' => 0,
+                    'C' => 6,
+                    _ => 0,
+                }
             }
             'Y' => {
-                score += 2 + calco(&mut line);
+                score += 2 + match c.nth(0).unwrap() {
+                    'A' => 6,
+                    'B' => 3,
+                    'C' => 0,
+                    _ => 0,
+                }
             }
             'Z' => {
-                score += 3 + calco(&mut line);
+                score += 3 + match c.nth(0).unwrap() {
+                    'A' => 0,
+                    'B' => 6,
+                    'C' => 3,
+                    _ => 0,
+                }
             }
             _ => {}
         }
