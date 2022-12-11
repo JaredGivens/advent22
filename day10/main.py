@@ -5,23 +5,36 @@ class Insc:
 		self.action = action
 		self.delay = delay
 	def ready(self):
-		ans = self.delay == 0
 		self.delay -= 1
-		return ans
+		return self.delay == 0
 
 inscs = []
 ans = 0
 i = 1
-for line in f.read().split('\n'):
+def cycle(i, x):
 	if i == 20 or i == 60 or i == 100 or i == 140 or i == 180 or i == 220:
-		ans += i * x
+		return i * x
+	return 0
 
+for line in f.read().split("\n"):
+	ans += cycle(i,x)
 	i += 1
 
-	parts = line.split(' ')
+	parts = line.split(" ")
+
 
 	if parts[0] == "addx":
-		inscs.append(Insc(int(parts[1]), 1))
+		ans += cycle(i, x)
+		i += 1
+		x += int(parts[1])
+	# 	inscs.append(Insc(int(parts[1]), 2))
+	
+	# if len(inscs):
+			
+			
+
+		
+
 
 	for insc in reversed(inscs):
 		if insc.ready():

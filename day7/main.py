@@ -27,20 +27,20 @@ class Dir:
 f = open("input", "r")
 root = Dir(None)
 current = root
-for line in f.read().split('\n'):
+for line in f.read().split("\n"):
 	if line:
-		if line[0] == '$':
-			if line[2] == 'c':
+		if line[0] == "$":
+			if line[2] == "c":
 				target = line[5:]
-				if target == '..':
+				if target == "..":
 					current = current.parent
-				elif target == '/':
+				elif target == "/":
 					current = root
 				else:
 					current.children.append(Dir(current))
 					current = current.children[-1]
-		elif line[2] != 'r':
-			current.size += int(line.split(' ')[0])
+		elif line[2] != "r":
+			current.size += int(line.split(" ")[0])
 
 root.compute_sizes()
 have = 70_000_000 - root.size
