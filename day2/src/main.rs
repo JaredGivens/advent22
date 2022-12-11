@@ -69,15 +69,18 @@ fn part_a(line: &str) -> i64 {
 fn main() {
     let contents = fs::read_to_string("input").unwrap();
     let lines = contents.split("\n").collect::<Vec<&str>>();
-    let mut score = 0;
+    let mut partA = 0;
+    let mut partB = 0;
     for i in 0..lines.len() {
         if lines[i].len() == 0 {
             continue;
         }
         println!("{}", lines[i]);
-        score += part_b(lines[i])
+        partA += part_a(lines[i]);
+        partB += part_b(lines[i]);
     }
     
-    println!("{score}");
+    println!("part a: {partA}");
+    println!("part b: {partB}");
 
 }

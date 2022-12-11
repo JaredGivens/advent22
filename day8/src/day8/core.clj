@@ -9,40 +9,43 @@
   (def row_len (inc(index-of file "\n")))
 
   (def count-series (fn [i0 h0 step in-bounds found]
-    (def i1 (+ i0 step))
-    (def h1 (int (get file i0)))
-    (if (in-bounds i1)
-      (if (and (< h0 h1))
-        (count-series i1 h1 step in-bounds (conj found i0))
-        (count-series i1 h0 step in-bounds found)
-      ) 
-      found
+    (let [i1 (+ i0 step) 
+          h1 (int (get file i0))]
+      (if (in-bounds i1)
+        (if (and (< h0 h1))
+          (count-series i1 h1 step in-bounds (conj found i0))
+          (count-series i1 h0 step in-bounds found)
+        ) 
+        found
+      )
     )
   ))
 
   (def file_len (count file))
 
   (def iter-rows (fn [cur_ind found]
-    (def nex_ind (+ cur_ind row_len))
-    (if (< cur_ind file_len)
-      (iter-rows nex_ind 
-        (count-series (+ nex_ind -2) 0 -1 (fn [i] (> i (dec cur_ind)))
-          (count-series cur_ind 0 1 (fn [i] (< i (dec nex_ind))) found)
+    (let [nex_ind (+ cur_ind row_len)]
+      (if (< cur_ind file_len)
+        (iter-rows nex_ind 
+          (count-series (+ nex_ind -2) 0 -1 (fn [i] (> i (dec cur_ind)))
+            (count-series cur_ind 0 1 (fn [i] (< i (dec nex_ind))) found)
+          )
         )
+        found
       )
-      found
     )
   ))
 
   (def iter-cols (fn [i0 found]
-    (def i1 (inc i0))
-    (if (< i0 (dec row_len))
-      (iter-cols i1
-        (count-series (- file_len i0 2) 0 (* -1 row_len) (fn [i] (> i -1))
-          (count-series i0 0 row_len (fn [i] (< i file_len)) found) 
+    (let [i1 (inc i0)]
+      (if (< i0 (dec row_len))
+        (iter-cols i1
+          (count-series (- file_len i0 2) 0 (* -1 row_len) (fn [i] (> i -1))
+            (count-series i0 0 row_len (fn [i] (< i file_len)) found) 
+          )
         )
+        found
       )
-      found
     )
   ))
 

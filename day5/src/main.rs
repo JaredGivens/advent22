@@ -32,13 +32,29 @@ impl Crates {
             false
         }
     }
+    pub fn parse_cmd9001(&mut self, s: &str) {
+        let mut crane = Vec::new();
+        let args = s.split(' ')
+            .filter_map(|s| match s.parse::<usize>() {
+                Ok(n) => Some(n),
+                Result::Err(_) => None,
+            }).collect::<Vec<usize>>();
+        for _ in 0..args[0] {
+            if let Some(c) = self.mat[args[1] - 1].pop() {
+                crane.push(c);
+            }
+        }
+        for _ in 0..args[0] {
+            self.mat[args[2] - 1].push(crane.pop().unwrap());
+        }
+    }
     pub fn parse_cmd(&mut self, s: &str) {
         let args = s.split(' ')
             .filter_map(|s| match s.parse::<usize>() {
                 Ok(n) => Some(n),
                 Result::Err(_) => None,
             }).collect::<Vec<usize>>();
-        for i in 0..args[0] {
+        for _ in 0..args[0] {
             if let Some(c) = self.mat[args[1] - 1].pop() {
                 self.mat[args[2] - 1].push(c);
             }
@@ -47,9 +63,10 @@ impl Crates {
     pub fn print(&mut self) {
         for i in 0..self.mat.len() {
             if let Some(n) = self.mat[i].last() {
-                println!("{n}");
+                print!("{n} ");
             }
         }
+        println!();
     }
 }
 
@@ -57,6 +74,7 @@ fn main() {
     let contents = fs::read_to_string("input").unwrap();
     let lines = contents.split('\n').collect::<Vec<&str>>();
     let mut crates = Crates::new();
+    let mut crates9001 = Crates::new();
     let mut filled = false;
     for line in lines {
         if line.len() == 0 {
@@ -64,16 +82,19 @@ fn main() {
         }
         
         if !filled {
+            crates9001.push(line);
             if !crates.push(line) {
                 filled = true;
             }
         } else {
 
-            crates.parse_cmd(line)
+            crates.parse_cmd(line);
+            crates9001.parse_cmd9001(line);
         }
 
 
         
     }
     crates.print();
+    crates9001.print();
 }
